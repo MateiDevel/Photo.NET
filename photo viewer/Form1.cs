@@ -35,17 +35,36 @@ namespace photo_viewer
                 foreach(string file in files)
                 {
 
-                        PictureBox image = new PictureBox
-                        {
-                            Image = Image.FromFile(file),
-                            SizeMode = PictureBoxSizeMode.Zoom,
-                            Width = 200,
-                            Height = 200,
-                            BorderStyle = BorderStyle.FixedSingle
-                            
-                        };
+                    Panel panel = new Panel
+                    {
+                        Width = 200,
+                        Height = 220,
+                        Margin = new Padding(10),
+                        
+                    };
 
-                    imagePanel.Controls.Add(image); 
+                    PictureBox image = new PictureBox
+                    {
+                        Image = Image.FromFile(file),
+                        SizeMode = PictureBoxSizeMode.Zoom,
+                        Width = 200,
+                        Height = 200,
+                        BorderStyle = BorderStyle.FixedSingle
+                            
+                    };
+                    Label fileName = new Label
+                    {
+                        Text = Path.GetFileName(file),
+                        AutoSize = false,
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        Dock = DockStyle.Bottom,
+                        Height = 20
+                    };
+
+                    panel.Controls.Add(image);
+                    panel.Controls.Add(fileName);
+
+                    imagePanel.Controls.Add(panel); 
                     Console.WriteLine(file);
                 }
             }
