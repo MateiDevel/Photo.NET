@@ -25,7 +25,7 @@ namespace photo_viewer
             }
             else 
             {
-                Application.Run(new firstRunForm());
+                Application.Run(new Form1());
             }
         }
     }
