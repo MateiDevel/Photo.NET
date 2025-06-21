@@ -1,4 +1,4 @@
-﻿namespace photo_viewer
+namespace photo_viewer
 {
     partial class Form1
     {
@@ -28,13 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.imagePanel = new System.Windows.Forms.Panel();
+            this.SuspendLayout();
+            // 
+            // imagePanel
+            // 
+            this.imagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imagePanel.Location = new System.Drawing.Point(0, 0);
+            this.imagePanel.Name = "imagePanel";
+            this.imagePanel.Size = new System.Drawing.Size(800, 450);
+            this.imagePanel.TabIndex = 0;
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.Controls.Add(this.imagePanel);
+            this.Name = "Form1";
+            this.Text = "Photo.NET";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Panel imagePanel;
     }
 }
 
