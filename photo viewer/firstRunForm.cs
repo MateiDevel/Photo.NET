@@ -46,6 +46,12 @@ namespace photo_viewer
                 welcome.Text = "The path selected does not exist";
                 welcome.Location = new Point((this.ClientSize.Width - welcome.Width) / 2, this.ClientSize.Height / 2);
             }
+            else 
+            {   
+                this.Close();
+                Console.WriteLine(Properties.Settings.Default.FolderPath);
+            }
+            
         }
 
         private void hello_Click(object sender, EventArgs e)
