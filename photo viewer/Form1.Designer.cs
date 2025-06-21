@@ -28,7 +28,7 @@ namespace photo_viewer
         /// </summary>
         private void InitializeComponent()
         {
-            this.imagePanel = new System.Windows.Forms.Panel();
+            this.imagePanel = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
             // imagePanel
@@ -53,7 +53,7 @@ namespace photo_viewer
 
         #endregion
 
-        private System.Windows.Forms.Panel imagePanel;
+        private System.Windows.Forms.FlowLayoutPanel imagePanel;
     }
 }
 

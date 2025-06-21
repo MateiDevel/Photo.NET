@@ -25,24 +25,27 @@ namespace photo_viewer
 
         private void scanFiles(object sender ,EventArgs e) 
         {
-            int x = 10;
-            foreach(var ext in extensions) 
+            
+            // flowlayoutpanel is better for dynamic use
+            imagePanel.Controls.Clear();
+
+            foreach (var ext in extensions) 
             {
                 string[] files = Directory.GetFiles(path, ext);
                 foreach(string file in files)
                 {
-                    PictureBox image = new PictureBox
-                    {
-                        Image = Image.FromFile(file),
-                        SizeMode = PictureBoxSizeMode.Zoom,
-                        Width = 200,
-                        Height = 200,
-                        BorderStyle = BorderStyle.FixedSingle,
-                        Left = x 
-                    };
 
-                    imagePanel.Controls.Add(image);
-                    x += image.Width + 10; 
+                        PictureBox image = new PictureBox
+                        {
+                            Image = Image.FromFile(file),
+                            SizeMode = PictureBoxSizeMode.Zoom,
+                            Width = 200,
+                            Height = 200,
+                            BorderStyle = BorderStyle.FixedSingle
+                            
+                        };
+
+                    imagePanel.Controls.Add(image); 
                     Console.WriteLine(file);
                 }
             }
