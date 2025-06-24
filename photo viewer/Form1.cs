@@ -19,8 +19,23 @@ namespace photo_viewer
 
         public Form1()
         {
+            Panel topPanel = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 20,
+                BackColor = Color.LightGray
+            };
+
+            Button settingsBtn = new Button
+            {
+                Text = "Settings",
+            };
+
             InitializeComponent();
             this.Load += scanFiles;
+
+            topPanel.Controls.Add(settingsBtn);
+            this.Controls.Add(topPanel);
         }
 
         private void scanFiles(object sender ,EventArgs e) 
@@ -31,14 +46,19 @@ namespace photo_viewer
 
             foreach (var ext in extensions) 
             {
+                int w_image = 200;
+                int h_image = 200;
+                int w_panel = 200;
+                int h_panel = h_image + 20;
+
                 string[] files = Directory.GetFiles(path, ext);
                 foreach(string file in files)
                 {
 
                     Panel panel = new Panel
                     {
-                        Width = 200,
-                        Height = 220,
+                        Width = w_panel,
+                        Height = h_panel,
                         Margin = new Padding(10),
                         
                     };
@@ -47,8 +67,8 @@ namespace photo_viewer
                     {
                         Image = Image.FromFile(file),
                         SizeMode = PictureBoxSizeMode.Zoom,
-                        Width = 200,
-                        Height = 200,
+                        Width = w_image,
+                        Height = h_image,
                         BorderStyle = BorderStyle.FixedSingle
                             
                     };
@@ -61,6 +81,11 @@ namespace photo_viewer
                         Height = 20
                     };
 
+                    if(image.Location.Y + image.Height >= this.ClientSize.Height) 
+                    {
+                        h_image = this.ClientSize.Height - 20;
+                    }
+
                     panel.Controls.Add(image);
                     panel.Controls.Add(fileName);
 
@@ -68,6 +93,16 @@ namespace photo_viewer
                     Console.WriteLine(file);
                 }
             }
+        }
+
+        private void settingsBtn_Click(object sender , EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
