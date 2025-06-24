@@ -47,6 +47,7 @@ namespace photo_viewer
             this.Controls.Add(this.imagePanel);
             this.Name = "Form1";
             this.Text = "Photo.NET";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 
         }
