@@ -14,8 +14,10 @@ namespace photo_viewer
 {
     public partial class Form1 : Form
     {
+
         string path = Properties.Settings.Default.FolderPath;
         string[] extensions = { "*.jpg" , "*.jpeg", "*.png" };
+        settingsForm settings = new settingsForm();
 
         public Form1()
         {
@@ -26,16 +28,18 @@ namespace photo_viewer
                 BackColor = Color.LightGray
             };
 
-            Button settingsBtn = new Button
+            Label settingsBtn = new Label
             {
                 Text = "Settings",
             };
 
             InitializeComponent();
             this.Load += scanFiles;
+            settingsBtn.Click += settingsBtn_Click;
 
             topPanel.Controls.Add(settingsBtn);
             this.Controls.Add(topPanel);
+            
         }
 
         private void scanFiles(object sender ,EventArgs e) 
@@ -97,7 +101,7 @@ namespace photo_viewer
 
         private void settingsBtn_Click(object sender , EventArgs e)
         {
-
+            settings.ShowDialog();
         }
 
         private void Form1_Load(object sender, EventArgs e)
