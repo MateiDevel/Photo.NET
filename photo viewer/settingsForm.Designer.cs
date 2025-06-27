@@ -28,6 +28,7 @@ namespace photo_viewer
         /// </summary>
         private void InitializeComponent()
         {
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.SuspendLayout();
             // 
             // settingsForm
@@ -45,5 +46,7 @@ namespace photo_viewer
         }
 
         #endregion
+
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }
