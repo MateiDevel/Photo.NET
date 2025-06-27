@@ -17,8 +17,9 @@ namespace photo_viewer
 
         string path = Properties.Settings.Default.FolderPath;
         string[] extensions = { "*.jpg" , "*.jpeg", "*.png" };
-        settingsForm settings = new settingsForm();
-
+        
+        Panel panel;
+            
         public Form1()
         {
             Panel topPanel = new Panel
@@ -42,11 +43,14 @@ namespace photo_viewer
             
         }
 
-        private void scanFiles(object sender ,EventArgs e) 
+
+
+        public void scanFiles(object sender ,EventArgs e) 
         {
             
             // flowlayoutpanel is better for dynamic use
             imagePanel.Controls.Clear();
+            
 
             foreach (var ext in extensions) 
             {
@@ -59,19 +63,19 @@ namespace photo_viewer
                 foreach(string file in files)
                 {
 
-                    Panel panel = new Panel
+                    panel = new Panel
                     {
                         Width = w_panel,
                         Height = h_panel,
                         Margin = new Padding(10),
-                        
+
                     };
 
                     PictureBox image = new PictureBox
                     {
                         Image = Image.FromFile(file),
                         SizeMode = PictureBoxSizeMode.Zoom,
-                        Width = w_image,
+                        Width = w_image ,
                         Height = h_image,
                         BorderStyle = BorderStyle.FixedSingle
                             
@@ -99,8 +103,16 @@ namespace photo_viewer
             }
         }
 
+        public void refreshFiles()
+        {
+            path = Properties.Settings.Default.FolderPath;
+            imagePanel.Controls.Clear(); 
+            scanFiles(this, EventArgs.Empty);
+        }
+
         private void settingsBtn_Click(object sender , EventArgs e)
         {
+            settingsForm settings = new settingsForm(this);
             settings.ShowDialog();
         }
 
