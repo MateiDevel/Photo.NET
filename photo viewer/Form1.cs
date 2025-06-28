@@ -16,10 +16,12 @@ namespace photo_viewer
     {
 
         string path = Properties.Settings.Default.FolderPath;
-        string[] extensions = { "*.jpg" , "*.jpeg", "*.png" };
-        
+        string[] extensions = { "*.jpg", "*.jpeg", "*.png" };
+
         Panel panel;
-            
+        PictureBox image;
+        PictureBox selectedImage;
+
         public Form1()
         {
             Panel topPanel = new Panel
@@ -40,19 +42,12 @@ namespace photo_viewer
 
             topPanel.Controls.Add(settingsBtn);
             this.Controls.Add(topPanel);
-            
         }
 
-
-
-        public void scanFiles(object sender ,EventArgs e) 
+        public void scanFiles(object sender, EventArgs e)
         {
-            
-            // flowlayoutpanel is better for dynamic use
             imagePanel.Controls.Clear();
-            
-
-            foreach (var ext in extensions) 
+            foreach (var ext in extensions)
             {
                 int w_image = 200;
                 int h_image = 200;
@@ -60,25 +55,22 @@ namespace photo_viewer
                 int h_panel = h_image + 20;
 
                 string[] files = Directory.GetFiles(path, ext);
-                foreach(string file in files)
+                foreach (string file in files)
                 {
-
                     panel = new Panel
                     {
                         Width = w_panel,
                         Height = h_panel,
                         Margin = new Padding(10),
-
                     };
 
-                    PictureBox image = new PictureBox
+                    image = new PictureBox
                     {
                         Image = Image.FromFile(file),
                         SizeMode = PictureBoxSizeMode.Zoom,
-                        Width = w_image ,
+                        Width = w_image,
                         Height = h_image,
                         BorderStyle = BorderStyle.FixedSingle
-                            
                     };
                     Label fileName = new Label
                     {
@@ -89,7 +81,7 @@ namespace photo_viewer
                         Height = 20
                     };
 
-                    if(image.Location.Y + image.Height >= this.ClientSize.Height) 
+                    if (image.Location.Y + image.Height >= this.ClientSize.Height)
                     {
                         h_image = this.ClientSize.Height - 20;
                     }
@@ -97,20 +89,36 @@ namespace photo_viewer
                     panel.Controls.Add(image);
                     panel.Controls.Add(fileName);
 
-                    imagePanel.Controls.Add(panel); 
+                    image.Click += image_Click;
+
+                    imagePanel.Controls.Add(panel);
                     Console.WriteLine(file);
                 }
+            }
+        }
+
+        private void image_Click(object sender, EventArgs e)
+        {
+            PictureBox clickedImage = sender as PictureBox;
+            if (clickedImage != null)
+            {
+                if (selectedImage != null && selectedImage != clickedImage)
+                {
+                    selectedImage.BackColor = Color.Transparent;
+                }
+                clickedImage.BackColor = Color.LightGray;
+                selectedImage = clickedImage;
             }
         }
 
         public void refreshFiles()
         {
             path = Properties.Settings.Default.FolderPath;
-            imagePanel.Controls.Clear(); 
+            imagePanel.Controls.Clear();
             scanFiles(this, EventArgs.Empty);
         }
 
-        private void settingsBtn_Click(object sender , EventArgs e)
+        private void settingsBtn_Click(object sender, EventArgs e)
         {
             settingsForm settings = new settingsForm(this);
             settings.ShowDialog();
