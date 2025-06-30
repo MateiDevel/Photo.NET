@@ -9,6 +9,7 @@ using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace photo_viewer
 {
@@ -21,6 +22,7 @@ namespace photo_viewer
         Panel panel;
         PictureBox image;
         PictureBox selectedImage;
+        Label fileName;
 
         public Form1()
         {
@@ -70,9 +72,10 @@ namespace photo_viewer
                         SizeMode = PictureBoxSizeMode.Zoom,
                         Width = w_image,
                         Height = h_image,
-                        BorderStyle = BorderStyle.FixedSingle
+                        BorderStyle = BorderStyle.FixedSingle,
+                        Tag = file
                     };
-                    Label fileName = new Label
+                    fileName = new Label
                     {
                         Text = Path.GetFileName(file),
                         AutoSize = false,
@@ -100,6 +103,17 @@ namespace photo_viewer
         private void image_Click(object sender, EventArgs e)
         {
             PictureBox clickedImage = sender as PictureBox;
+            if (clickedImage == null) return;
+            string imagePath = clickedImage.Tag as string;
+
+            try
+            {
+                Process.Start(new ProcessStartInfo(imagePath) { UseShellExecute = true });
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Error loading image: " + ex.Message);
+            }
             if (clickedImage != null)
             {
                 if (selectedImage != null && selectedImage != clickedImage)
@@ -109,6 +123,8 @@ namespace photo_viewer
                 clickedImage.BackColor = Color.LightGray;
                 selectedImage = clickedImage;
             }
+
+
         }
 
         public void refreshFiles()
