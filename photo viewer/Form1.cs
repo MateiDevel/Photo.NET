@@ -17,15 +17,33 @@ namespace photo_viewer
     {
 
         string path = Properties.Settings.Default.FolderPath;
-        string[] extensions = { "*.jpg", "*.jpeg", "*.png" };
+        string[] extensions = { "*.jpg", "*.jpeg", "*.png", "*.bmp", "*.webp", "*.svg" };
 
         Panel panel;
         PictureBox image;
         PictureBox selectedImage;
         Label fileName;
+        Label pathLabel;
 
         public Form1()
         {
+            Panel pathPanel = new Panel
+            {
+                Dock = DockStyle.Bottom,
+                AutoScroll = true,
+                Height = 20,
+                BackColor = Color.LightGray,
+               
+            };
+
+            pathLabel = new Label
+            {
+                Text = "Path: " + path,
+                AutoSize = true,
+                AutoEllipsis = true,
+                Location = new Point(10, 3),
+            };
+
             Panel topPanel = new Panel
             {
                 Dock = DockStyle.Top,
@@ -36,14 +54,18 @@ namespace photo_viewer
             Label settingsBtn = new Label
             {
                 Text = "Settings",
+                Location = new Point(10, 3),
             };
 
             InitializeComponent();
             this.Load += scanFiles;
             settingsBtn.Click += settingsBtn_Click;
 
+            pathPanel.Controls.Add(pathLabel);
             topPanel.Controls.Add(settingsBtn);
+
             this.Controls.Add(topPanel);
+            this.Controls.Add(pathPanel);
         }
 
         public void scanFiles(object sender, EventArgs e)
@@ -66,6 +88,19 @@ namespace photo_viewer
                         Margin = new Padding(10),
                     };
 
+                    try
+                    {
+                        image = new PictureBox
+                        {
+                            Image = Image.FromFile(file),
+                        };
+                    }
+                    catch (OutOfMemoryException)
+                    {
+                        Console.WriteLine($"Failed to load image: {file}");
+                        continue;
+                    }
+
                     image = new PictureBox
                     {
                         Image = Image.FromFile(file),
@@ -79,6 +114,7 @@ namespace photo_viewer
                     {
                         Text = Path.GetFileName(file),
                         AutoSize = false,
+                        AutoEllipsis = true,
                         TextAlign = ContentAlignment.MiddleCenter,
                         Dock = DockStyle.Bottom,
                         Height = 20
@@ -96,6 +132,8 @@ namespace photo_viewer
 
                     imagePanel.Controls.Add(panel);
                     Console.WriteLine(file);
+
+                    
                 }
             }
         }
@@ -103,7 +141,6 @@ namespace photo_viewer
         private void image_Click(object sender, EventArgs e)
         {
             PictureBox clickedImage = sender as PictureBox;
-            if (clickedImage == null) return;
             string imagePath = clickedImage.Tag as string;
 
             try
@@ -114,6 +151,7 @@ namespace photo_viewer
             {
                 MessageBox.Show("Error loading image: " + ex.Message);
             }
+
             if (clickedImage != null)
             {
                 if (selectedImage != null && selectedImage != clickedImage)
@@ -132,6 +170,7 @@ namespace photo_viewer
             path = Properties.Settings.Default.FolderPath;
             imagePanel.Controls.Clear();
             scanFiles(this, EventArgs.Empty);
+            pathLabel.Text = "Path:" + path;
         }
 
         private void settingsBtn_Click(object sender, EventArgs e)
