@@ -33,6 +33,7 @@ namespace photo_viewer
             // 
             // imagePanel
             // 
+            this.imagePanel.AutoScroll = true;
             this.imagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imagePanel.Location = new System.Drawing.Point(0, 0);
             this.imagePanel.Name = "imagePanel";
