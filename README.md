@@ -11,4 +11,10 @@
   </tr>
 </table>
 
-# photo viewer
+# View every photo from a selected path
+Just add the path where you photos are and enjoy them!
+
+# P.S.:
+The app is still in development. I currently need to work on some optimizations for the app.
+
+
