@@ -143,14 +143,7 @@ namespace photo_viewer
             PictureBox clickedImage = sender as PictureBox;
             string imagePath = clickedImage.Tag as string;
 
-            try
-            {
-                Process.Start(new ProcessStartInfo(imagePath) { UseShellExecute = true });
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Error loading image: " + ex.Message);
-            }
+           
 
             if (clickedImage != null)
             {
@@ -168,7 +161,37 @@ namespace photo_viewer
         public void refreshFiles()
         {
             path = Properties.Settings.Default.FolderPath;
+
+            foreach (Control ctrl in imagePanel.Controls)
+            {
+                if (ctrl is Panel imgPanel)
+                {
+                    foreach (Control child in imgPanel.Controls)
+                    {
+                        if (child is PictureBox pb)
+                        {
+                            if (pb.Image != null)
+                            {
+                                pb.Image.Dispose(); // free the image from memory
+                                pb.Image = null;
+                            }
+                            pb.Dispose();
+                        }
+                        else
+                        {
+                            child.Dispose(); // dispose Label or other controls
+                        }
+                    }
+                    imgPanel.Dispose(); // dispose the panel
+                }
+            }
+
             imagePanel.Controls.Clear();
+
+            // force garbage collection to reclaim memory
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             scanFiles(this, EventArgs.Empty);
             pathLabel.Text = "Path:" + path;
         }
