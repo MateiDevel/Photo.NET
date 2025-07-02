@@ -55,14 +55,24 @@ namespace photo_viewer
             {
                 Text = "Settings",
                 Location = new Point(10, 3),
+                AutoSize = true
+            };
+
+            Label creditsBtn = new Label
+            {
+                Text = "Credits",
+                Location = new Point(60, 3),
+                AutoSize = true
             };
 
             InitializeComponent();
             this.Load += scanFiles;
             settingsBtn.Click += settingsBtn_Click;
+            creditsBtn.Click += creditsBtn_Click;
 
             pathPanel.Controls.Add(pathLabel);
             topPanel.Controls.Add(settingsBtn);
+            topPanel.Controls.Add(creditsBtn);
 
             this.Controls.Add(topPanel);
             this.Controls.Add(pathPanel);
@@ -136,6 +146,12 @@ namespace photo_viewer
                     
                 }
             }
+        }
+
+        private void creditsBtn_Click(object sender, EventArgs e)
+        {
+            creditsForm creditsForm = new creditsForm();
+            creditsForm.ShowDialog();
         }
 
         private void image_Click(object sender, EventArgs e)
