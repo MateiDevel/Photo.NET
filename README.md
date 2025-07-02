@@ -1,7 +1,7 @@
 <table align='center', width='100%'>
   <tr>
     <td align='left'>
-      <img src='photo viewer/images/placeover.png', width='100%'>
+      <img src='photo viewer/images/placeover.png'>
     </td>
     <td align='center'>
       <h1>Photo.NET</h1>
