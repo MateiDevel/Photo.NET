@@ -5,6 +5,7 @@
     </td> 
     <td align='center'>
       <h1>Photo.NET</h1>
+      <h2>An obviously open-source photo viewer.</h2>
     </td>
   </tr>
 </table>
