@@ -143,7 +143,14 @@ namespace photo_viewer
             PictureBox clickedImage = sender as PictureBox;
             string imagePath = clickedImage.Tag as string;
 
-           
+            try
+            {
+                Process.Start(new ProcessStartInfo(imagePath) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening photo: " + ex.Message);
+            }
 
             if (clickedImage != null)
             {
