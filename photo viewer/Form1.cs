@@ -78,74 +78,105 @@ namespace photo_viewer
             this.Controls.Add(pathPanel);
         }
 
-        public void scanFiles(object sender, EventArgs e)
+        public async void scanFiles(object sender, EventArgs e)
         {
-            imagePanel.Controls.Clear();
-            foreach (var ext in extensions)
+
+            Panel loadingPanel = new Panel
             {
-                int w_image = 200;
-                int h_image = 200;
-                int w_panel = 200;
-                int h_panel = h_image + 20;
+                Dock = DockStyle.Fill,
+                BackColor = Color.White,
+            };
 
-                string[] files = Directory.GetFiles(path, ext);
-                foreach (string file in files)
+            Label loadingLabel = new Label
+            {
+                Text = "Loading",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Arial", 46, FontStyle.Bold),
+                AutoSize = true
+                
+            };
+
+            loadingPanel.Controls.Add(loadingLabel);
+            this.Controls.Add(loadingPanel);
+            loadingPanel.BringToFront();
+            loadingPanel.Refresh();
+
+            await Task.Run(() =>
+            {
+
+                Invoke(new Action(() => imagePanel.Controls.Clear()));
+
+                foreach (var ext in extensions)
                 {
-                    panel = new Panel
-                    {
-                        Width = w_panel,
-                        Height = h_panel,
-                        Margin = new Padding(10),
-                    };
+                    int w_image = 200;
+                    int h_image = 200;
+                    int w_panel = 200;
+                    int h_panel = h_image + 20;
 
-                    try
+                    string[] files = Directory.GetFiles(path, ext);
+                    foreach (string file in files)
                     {
+                        panel = new Panel
+                        {
+                            Width = w_panel,
+                            Height = h_panel,
+                            Margin = new Padding(10),
+                        };
+
+                        try
+                        {
+                            image = new PictureBox
+                            {
+                                Image = Image.FromFile(file),
+                            };
+                        }
+                        catch (OutOfMemoryException)
+                        {
+                            Console.WriteLine($"Failed to load image: {file}");
+                            continue;
+                        }
+
                         image = new PictureBox
                         {
                             Image = Image.FromFile(file),
+                            SizeMode = PictureBoxSizeMode.Zoom,
+                            Width = w_image,
+                            Height = h_image,
+                            BorderStyle = BorderStyle.FixedSingle,
+                            Tag = file
                         };
+                        fileName = new Label
+                        {
+                            Text = Path.GetFileName(file),
+                            AutoSize = false,
+                            AutoEllipsis = true,
+                            TextAlign = ContentAlignment.MiddleCenter,
+                            Dock = DockStyle.Bottom,
+                            Height = 20
+                        };
+
+                        if (image.Location.Y + image.Height >= this.ClientSize.Height)
+                        {
+                            h_image = this.ClientSize.Height - 20;
+                        }
+
+                        panel.Controls.Add(image);
+                        panel.Controls.Add(fileName);
+
+                        image.Click += image_Click;
+
+
+                        if (!this.IsDisposed && !this.Disposing)
+                        {
+                            Invoke(new Action(() => imagePanel.Controls.Add(panel)));
+                        }
+                 
                     }
-                    catch (OutOfMemoryException)
-                    {
-                        Console.WriteLine($"Failed to load image: {file}");
-                        continue;
-                    }
-
-                    image = new PictureBox
-                    {
-                        Image = Image.FromFile(file),
-                        SizeMode = PictureBoxSizeMode.Zoom,
-                        Width = w_image,
-                        Height = h_image,
-                        BorderStyle = BorderStyle.FixedSingle,
-                        Tag = file
-                    };
-                    fileName = new Label
-                    {
-                        Text = Path.GetFileName(file),
-                        AutoSize = false,
-                        AutoEllipsis = true,
-                        TextAlign = ContentAlignment.MiddleCenter,
-                        Dock = DockStyle.Bottom,
-                        Height = 20
-                    };
-
-                    if (image.Location.Y + image.Height >= this.ClientSize.Height)
-                    {
-                        h_image = this.ClientSize.Height - 20;
-                    }
-
-                    panel.Controls.Add(image);
-                    panel.Controls.Add(fileName);
-
-                    image.Click += image_Click;
-
-                    imagePanel.Controls.Add(panel);
-                    Console.WriteLine(file);
-
-                    
                 }
-            }
+            });
+
+            this.Controls.Remove(loadingPanel);
+            loadingPanel.Dispose();
         }
 
         private void creditsBtn_Click(object sender, EventArgs e)
