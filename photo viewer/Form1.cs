@@ -24,6 +24,7 @@ namespace photo_viewer
         PictureBox selectedImage;
         Label fileName;
         Label pathLabel;
+        Image fullimg;
 
         public Form1()
         {
@@ -125,10 +126,7 @@ namespace photo_viewer
 
                         try
                         {
-                            image = new PictureBox
-                            {
-                                Image = Image.FromFile(file),
-                            };
+                            fullimg = Image.FromFile(file);
                         }
                         catch (OutOfMemoryException)
                         {
@@ -136,15 +134,19 @@ namespace photo_viewer
                             continue;
                         }
 
+                        Image thumbnail = fullimg.GetThumbnailImage(w_image, h_image, () => false, IntPtr.Zero);
+                        fullimg.Dispose(); 
+
                         image = new PictureBox
                         {
-                            Image = Image.FromFile(file),
+                            Image = thumbnail,       
                             SizeMode = PictureBoxSizeMode.Zoom,
                             Width = w_image,
                             Height = h_image,
                             BorderStyle = BorderStyle.FixedSingle,
                             Tag = file
                         };
+
                         fileName = new Label
                         {
                             Text = Path.GetFileName(file),
